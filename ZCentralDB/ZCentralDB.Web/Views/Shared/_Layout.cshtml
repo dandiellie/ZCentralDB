@@ -1,9 +1,10 @@
 ﻿<!DOCTYPE html>
-<html>
+<html ng-app="ZCentralDB">
 <head>
+    <base href="/">
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
-    <title>@ViewBag.Title</title>
+    <title>Z | Companies - Client Portal</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 </head>
@@ -36,6 +37,7 @@
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/angular")
     @RenderSection("scripts", required: false)
 </body>
 </html>
