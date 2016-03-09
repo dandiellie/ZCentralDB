@@ -1,25 +1,11 @@
 ﻿(function () {
     angular
         .module('ZCentralDB')
-        .controller('productsController', ['uploadManager', '$scope', '$rootScope', productsController]);
+        .controller('productsController', [productsController]);
 
-    function productsController(uploadManager, $scope, $rootScope) {
+    function productsController() {
         var vm = this;
         vm.isLoading = false;
-        vm.files = [];
-        vm.percentage = 0;
-        vm.upload = function () {
-            uploadManager.upload();
-            vm.files = [];
-        };
-        $rootScope.$on('fileAdded', function (e, call) {
-            vm.files.push(call);
-            $scope.$apply();
-        });
-        $rootScope.$on('uploadProgress', function (e, call) {
-            vm.percentage = call;
-            $scope.$apply();
-        });
 
         function loadPage() {
             //employeesService.getEmployees().then(successGetEmployees, failGetEmployees);
