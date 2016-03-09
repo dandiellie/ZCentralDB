@@ -1,0 +1,71 @@
+﻿@using System.Data.Entity.Infrastructure
+@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="row top-buffer">
+    @*<div class="col-xs-6">
+        <a href="#">
+            <div class="well" id="processCsv">
+                <h1>
+                    <i class="fa fa-table"></i> Process New Input File
+                </h1>
+            </div>
+        </a>
+    </div>*@
+    <div class="col-xs-6">
+        <a href="@Url.Action("UploadInputFile", "Schedule")">
+            <div class="well">
+                <h2>
+                    <i class="fa fa-calendar"></i> Upload New Sales Planning File
+                </h2>
+            </div>
+        </a>
+    </div>
+    <div class="col-xs-6">
+        <a href="@Url.Action("ManageStores", "Schedule")">
+            <div class="well">
+                <h2>
+                    <i class="fa fa-calendar"></i> Manage Schedules
+                </h2>
+            </div>
+        </a>
+    </div>
+</div>
+
+<!-- Modal -->
+@*<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Process New Input File</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <span>Are you sure you want to do this? This will replace all data currently in the database with data from the input file.</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                @Html.ActionLink("Continue", "ProcessCsv", "Schedule", null, new { @class = "btn btn-primary" })
+            </div>
+        </div>
+    </div>
+</div>*@
+
+@*@section scripts
+{
+    <script type="text/javascript">
+        var modal = $('#myModal');
+        modal.modal({ keyboard: false, backdrop: false, show: false });
+
+        $("#processCsv").click(function(e) {
+
+            $('#myModal').modal('show');
+        });
+    </script>
+
+}*@

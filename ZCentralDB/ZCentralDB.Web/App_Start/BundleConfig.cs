@@ -27,19 +27,18 @@ namespace ZCentralDB.Web
             bundles.Add(new ScriptBundle("~/bundles/angular").Include(
                         "~/Scripts/angular.js",
                         "~/Scripts/angular-ui-router.js",
+                        "~/Scripts/jquery.fileupload.js",
+                        "~/Scripts/jquery-ui.js",
                         "~/app/app.module.js",
                         "~/app/app.state.js",
                         "~/app/app.constant.js",
                         // services
-                        //"~/app/components/employees/employeesService.js",
-                        //"~/app/components/location/locationService.js",
-                        //"~/app/components/login/loginService.js",
-                        //"~/app/components/orders/ordersService.js",
-                        //"~/app/components/runner/runnerService.js",
-                        //"~/app/components/vendor/vendorService.js",
+                        "~/app/components/login/loginService.js",
+                        "~/app/components/products/productsService.js",
                         // controllers
-                        //"~/app/components/employees/employeesController.js",
-                        "~/app/components/index/indexController.js"));
+                        "~/app/components/index/indexController.js",
+                        "~/app/components/login/loginController.js",
+                        "~/app/components/products/productsController.js"));
         }
     }
 }

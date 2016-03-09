@@ -224,6 +224,15 @@
     <Content Include="app\app.state.js" />
     <Content Include="app\components\index\index.html" />
     <Content Include="app\components\index\indexController.js" />
+    <Content Include="app\components\login\login.html" />
+    <Content Include="app\components\login\loginController.js" />
+    <Content Include="app\components\login\loginService.js" />
+    <Content Include="app\components\products\products.html" />
+    <Content Include="app\components\products\productsController.js" />
+    <Content Include="app\components\products\productsService.js" />
+    <Content Include="app\components\products\views\all.html" />
+    <Content Include="app\components\products\views\find.html" />
+    <Content Include="app\components\products\views\upload.html" />
     <Content Include="Areas\HelpPage\HelpPage.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="favicon.ico" />
@@ -260,6 +269,8 @@
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery-ui.js" />
+    <Content Include="Scripts\jquery.fileupload.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />

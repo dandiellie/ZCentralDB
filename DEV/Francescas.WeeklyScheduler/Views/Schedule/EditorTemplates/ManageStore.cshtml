@@ -1,0 +1,20 @@
+﻿@model Francescas.WeeklyScheduler.Models.ManageStore
+
+<tr>
+    <td>
+        @Html.CheckBoxFor(model => model.IsChecked, new { @class="isCheckBox"})
+    </td>
+    <td>
+        @Html.DisplayFor(model => model.StoreNumber)
+        @Html.HiddenFor(model => model.StoreNumber)
+    </td>
+    <td>
+        @Html.DisplayFor(model => model.SentDateTime)
+        @Html.HiddenFor(model => model.SentDateTime)
+    </td>
+    <td>
+        @Html.ActionLink("Download", "DownloadSchedule", new {id = Model.StoreNumber}) |
+        @Html.ActionLink("E-Mail", "EmailSchedule", new {id = Model.StoreNumber})
+    </td>
+</tr>
+

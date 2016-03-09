@@ -1,0 +1,19 @@
+﻿<h1>Upload CSV</h1>
+
+<div class="form-actions">
+    <span class="btn btn-success fileinput-button">
+        <i class="icon-plus icon-white"></i>
+        <input type="file" name="file" data-url="home/upload" multiple upload><span>Add files...</span>
+    </span>
+    <span type="submit" class="btn btn-primary" ng-click="vm.upload()">Upload</span>
+</div>
+
+<div>
+    <ul>
+        <li ng-repeat="file in vm.files">{{file}}</li>
+    </ul>
+</div>
+
+<div class="progress" ng-show="percentage">
+    <div class="bar" style="width: {{vm.percentage}}%;"></div>
+</div>

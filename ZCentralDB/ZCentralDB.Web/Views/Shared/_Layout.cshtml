@@ -10,19 +10,28 @@
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
+        <div class="container" ng-controller="loginController as vm">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                <a href="/" class="navbar-brand">Z | Companies</a>
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home", new { area = "" }, null)</li>
-                    <li>@Html.ActionLink("API", "Index", "Help", new { area = "" }, null)</li>
+                    <li><a ui-sref="products.all" ng-show="true">Products</a></li>
+                    <li><a ui-sref="runner.all" ng-show="vm.isRunner();">Runner</a></li>
+                    <li><a ui-sref="vendor.open" ng-show="vm.isVendor();">Vendor</a></li>
+                    <li><a ui-sref="orders.open" ng-show="vm.isAdmin();">Orders</a></li>
+                    <li><a ui-sref="location.stores" ng-show="vm.isAdmin();">Location</a></li>
+                    <li><a ui-sref="employees.all" ng-show="vm.isAdmin();">Employees</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="/login" ng-show="!vm.isLoggedIn()">Login</a></li>
+
+                    <li><a ng-click="vm.logout()" ng-show="vm.isLoggedIn()" style="cursor:pointer;">Logout</a></li>
                 </ul>
             </div>
         </div>

@@ -3,7 +3,7 @@
 
     angular
 		.module('ZCentralDB')
-        .constant('EmployeeUrls', {
+        .constant('UserUrls', {
 		    getStores: '/api/employee/stores',
 		    getEmployees: '/api/employee/all',
 		    getEmployee: '/api/employee/specific',

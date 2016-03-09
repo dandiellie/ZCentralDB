@@ -15,7 +15,7 @@ namespace ZCentralDB.Web
 
             routes.MapRoute(
                 name: "Default",
-                url: "{controller}/{action}/{id}",
+                url: "{*path}",
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
             );
         }

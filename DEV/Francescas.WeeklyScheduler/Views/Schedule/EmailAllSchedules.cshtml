@@ -1,0 +1,152 @@
+﻿@model Francescas.WeeklyScheduler.Models.EmailAllSchedulesViewModel
+
+@{
+    ViewBag.Title = "Email Schedules";
+}
+
+<h2>Email Selected Schedules</h2>
+@if (ViewBag.Errors != null)
+{
+    <div class="form-group row">
+        <div class="col-xs-2"></div>
+        <div class="col-xs-8">
+            <div class="panel panel-danger">
+                <div class="panel-heading">The following errors have been encountered:</div>
+                <div class="panel-body">
+                    @foreach (string error in ViewBag.Errors)
+                    {
+                        <div class="text-danger">@error</div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+@using (Html.BeginForm("EmailAllSchedules", "Schedule", FormMethod.Post, new { @id = "emailAll"}))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <hr/>
+        @Html.ValidationSummary(true, "", new {@class = "text-danger"})
+        <div class="form-group">
+            @Html.LabelFor(model => model.Date, htmlAttributes: new {@class = "control-label col-md-2"})
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Date, new {htmlAttributes = new {@class = "form-control", @id = "datetimepicker"}})
+                @Html.ValidationMessageFor(model => model.Date, "", new {@class = "text-danger"})
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.CustomEmail, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.CustomEmail, new { htmlAttributes = new { @class = "form-control", @id = "datetimepicker" } })
+                @Html.ValidationMessageFor(model => model.CustomEmail, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Send E-Mails" class="btn btn-default" id="sendEmails"/>
+            </div>
+        </div>
+    </div>
+
+    for (var i = 0; i < Model.Stores.Count; i++)
+    {
+        @Html.HiddenFor(m => m.Stores[i].StoreNumber)
+        @Html.HiddenFor(m => m.Stores[i].IsChecked)
+        @Html.HiddenFor(m => m.Stores[i].SentDateTime)
+    }
+}
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">Generating and E-Mailing Selected Schedules</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div id="progressbar">
+                            <div class="progress-label">Loading...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ul id="discussion"></ul>
+<div>
+    @Html.ActionLink("Back to List", "ManageStores")
+</div>
+<style>
+    .ui-progressbar {
+        position: relative;
+    }
+
+    .progress-label {
+        position: absolute;
+        left: 50%;
+        top: 4px;
+        font-weight: bold;
+        text-shadow: 1px 1px 0 #fff;
+    }
+</style>
+
+@section scripts
+{
+    <script src="~/signalr/hubs"></script>
+    <script type="text/javascript">
+        $(function() {
+            $("#datetimepicker").datetimepicker({
+                format: "MM/DD/YYYY"
+            });
+        });
+    </script>
+
+    <script type="text/javascript">
+        var modal = $('#myModal');
+        modal.modal({ keyboard: false, backdrop: false, show: false });
+
+        $("#emailAll").submit(function (e) {
+            e.preventDefault();
+            $('#myModal').modal('show');
+            this.submit();
+        });
+    </script>
+
+    <script type="text/javascript">
+        $(function () {
+
+            var progressbar = $("#progressbar"),
+                progressLabel = $(".progress-label");
+
+            progressbar.progressbar({
+                value: false,
+                change: function () {
+                    progressLabel.text(numeral(progressbar.progressbar("value")/100).format("0.00%"));
+                },
+                complete: function () {
+                    progressLabel.text("Complete!");
+                }
+            });
+
+            var hub = $.connection.scheduleHub;
+
+            hub.client.massEmailStatus = function(currentBoutique, message, totalBoutiques, boutiquesProcessed) {
+                progressbar.progressbar("value", (boutiquesProcessed / totalBoutiques) * 100);
+                $("#myModalLabel").val(message);
+            };
+            // Start the connection.
+            $.connection.hub.start().done(function() {
+
+            });
+        });
+    </script>
+}

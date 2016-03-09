@@ -1,0 +1,185 @@
+﻿@model Francescas.WeeklyScheduler.Models.ManageStoresViewModel
+
+@{
+    ViewBag.Title = "ManageStores";
+}
+
+<h2>Manage Schedules</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="row">
+        <div class="col-xs-12">
+            <input type="button" value="E-Mail Selected" class="btn btn-default" data-bind="click: sendEmails, enable: emailSelectedOnPage" />
+            <input type="button" value="Show All" class="btn btn-default" data-bind="click: showAll, disable: pagedItems().length == items().length" />
+        </div>
+    </div>
+    <div class="row top-buffer">
+        <div class="col-xs-12">
+            <table class="table table-striped">
+                <tr>
+                    <th>
+
+                        <input type="checkbox" data-bind="checked: selectAllOnPage" /><span>&nbsp;&nbsp;Select All</span>
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Stores.FirstOrDefault().StoreNumber)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Stores.FirstOrDefault().SentDateTime)
+                    </th>
+                    <th></th>
+                </tr>
+
+                <!-- ko foreach: pagedItems -->
+                <tr>
+                    <td>
+                        <input type="checkbox" class="isCheckBox" data-bind="checked: IsChecked"/>
+                    </td>
+                    <td>
+                        <span data-bind="text: StoreNumber"></span>
+                        <input type="hidden" data-bind="value: StoreNumber"/>
+                    </td>
+                    <td>
+                        <span data-bind="text: SentDateTime() == null ? null : moment(SentDateTime()).format('MMMM Do YYYY, h:mm:ss a')"></span>
+                        <input type="hidden" data-bind="value: SentDateTime"/>
+                    </td>
+                    <td>
+                        <a data-bind="attr: { href: '/Schedule/DownloadSchedule/'+ StoreNumber() }, text: 'Download'"></a> |
+                        <a data-bind="attr: { href: 'javascript;' }, text: 'E-Mail', click: $root.sendEmail"></a>
+                    </td>
+                </tr>
+                <!-- /ko -->
+            </table>
+            <ul class="pager">
+                <li data-bind="css: {'disabled': !previousPageEnabled()}">
+                    <a href="#" data-bind="click: previousPage">Previous</a>
+                </li>
+                <li data-bind="css: {'disabled': !nextPageEnabled()}">
+                    <a href="#" data-bind="click: nextPage">Next</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+}
+
+@section scripts
+{
+    <script type="text/javascript">
+        var model = @Html.Raw(Json.Encode(Model));
+
+        var ViewModel = function(data) {
+            var self = this;
+            // stuff I care about
+            self.items = ko.mapping.fromJS(data.Stores);
+            var subs = ko.observableArray([]);
+            _.forEach(self.items(), function(item) {
+                subs.push(item.IsChecked.subscribe(function(newval) {
+                    if (!newval) {
+                        self.selectAllOnPage(false);
+                    }
+                    var count = 0;
+                    _.forEach(self.pagedItems(), function(row) {
+                        if (row.IsChecked())
+                            count++;
+                    });
+                    if (count == self.pagedItems().length) {
+                        self.selectAllOnPage(true);
+                    }
+
+                }));
+            });
+
+            // pager related stuff
+            // ---------------------------------------------
+            self.currentPage = ko.observable(1);
+            self.perPage = ko.observable(10);
+            self.pagedItems = ko.computed(function() {
+                var pg = self.currentPage(),
+                    start = self.perPage() * (pg - 1),
+                    end = start + self.perPage();
+                return self.items().slice(start, end);
+            }, self);
+            self.nextPage = function() {
+                if (self.nextPageEnabled())
+                    self.currentPage(self.currentPage() + 1);
+            };
+            self.nextPageEnabled = ko.computed(function() {
+                return self.items().length > self.perPage() * self.currentPage();
+            }, self);
+            self.previousPage = function() {
+                if (self.previousPageEnabled())
+                    self.currentPage(self.currentPage() - 1);
+            };
+            self.previousPageEnabled = ko.computed(function() {
+                return self.currentPage() > 1;
+            }, self);
+
+            self.selectAllOnPage = ko.observable(false);
+
+            subs.push(self.selectAllOnPage.subscribe(function(newval) {
+
+                if (newval) {
+                    _.forEach(self.pagedItems(), function(item) {
+                        item.IsChecked(true);
+                        self.selectAllOnPage(true);
+                    });
+                }
+
+                var unchecked = _.find(self.pagedItems(), function(item) {
+                    return !item.IsChecked();
+                });
+                if (!newval && typeof unchecked === 'undefined') {
+                    _.forEach(self.pagedItems(), function(item) {
+                        item.IsChecked(false);
+                        self.selectAllOnPage(false);
+                    });
+                } 
+
+                if (!newval && typeof unchecked !== "undefined") {
+                    self.selectAllOnPage(false);
+                }
+            }));
+
+            self.emailSelectedOnPage = ko.computed(function() {
+                var count = 0;
+                _.forEach(self.pagedItems(), function(item) {
+                    count += item.IsChecked() ? 1 : 0;
+                });
+                if (count > 0)
+                    return true;
+                else {
+                    return false;
+                }
+            });
+
+            self.showAll = function() {
+                self.perPage(self.items().length);
+                self.selectAllOnPage(false);
+                
+            };
+
+            self.sendEmails = function() {
+                _.forEach(self.items(), function(item) {
+                    item.SentDateTime(item.SentDateTime() == null ? null : moment(item.SentDateTime()));
+                });
+                var mod = ko.mapping.toJS(self.items());
+                ko.utils.postJson("/Schedule/ManageStores", { _viewModel: { Stores: mod } });
+            };
+
+            self.sendEmail = function(record) {
+                record.SentDateTime(record.SentDateTime() == null ? null : moment(record.SentDateTime()));
+                record.IsChecked(true);
+                var mod = ko.mapping.toJS(record);
+                ko.utils.postJson("/Schedule/ManageStores", { _viewModel: { Stores: [mod] } });
+            };
+        }
+
+        ko.applyBindings(new ViewModel(model));
+    </script>
+}
+
+
+
+
