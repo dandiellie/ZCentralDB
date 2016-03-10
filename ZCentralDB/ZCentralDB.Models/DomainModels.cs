@@ -46,7 +46,7 @@ namespace ZCentralDB.Models
         public string ShortDesc { get; set; }
         public string LongDesc { get; set; }
         public string ImageUrl { get; set; }
-        public decimal Weight { get; set; }
+        public decimal? Weight { get; set; }
         public string Fabric { get; set; }
         public string Certifications { get; set; }
         public virtual ICollection<Detail> Details { get; set; }
@@ -60,7 +60,7 @@ namespace ZCentralDB.Models
         public virtual Category Category { get; set; }
 
         [ForeignKey("Organization")]
-        public int OrganizationId { get; set; }
+        public int? OrganizationId { get; set; }
         public virtual Organization Organization { get; set; }
     }
 
@@ -83,8 +83,8 @@ namespace ZCentralDB.Models
         public string Size { get; set; }
         public string Waist { get; set; }
         public string Length { get; set; }
-        public decimal Price { get; set; }
-        public decimal OldPrice { get; set; }
+        public decimal? Price { get; set; }
+        public decimal? OldPrice { get; set; }
 
         [ForeignKey("Product")]
         public int ProductId { get; set; }
