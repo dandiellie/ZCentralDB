@@ -77,11 +77,12 @@ namespace ZCentralDB.Data.Repositories
                 product.Weight = prod.Weight;
                 product.Fabric = prod.Fabric;
                 product.Certifications = prod.Certifications;
+                if (product.Details == null) product.Details = new List<Detail>();
                 _db.SaveChanges();
 
                 // Add Or Update Detail Item
                 detail = null;
-                detail = _db.Details.Where(d => d.Product == product && d.Sku == prod.Sku).FirstOrDefault();
+                detail = _db.Details.Where(d => d.Product.Id == product.Id && d.Sku == prod.Sku && d.Color == prod.Color && d.Size == prod.Size && d.Length == prod.Length && d.Waist == prod.Waist).FirstOrDefault();
                 if (detail == null)
                 {
                     detail = new Detail

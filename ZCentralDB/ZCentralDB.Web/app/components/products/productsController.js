@@ -1,13 +1,13 @@
 ﻿(function () {
     angular
         .module('ZCentralDB')
-        .controller('productsController', [productsController]);
+        .controller('productsController', ['productsService', productsController]);
 
-    function productsController() {
+    function productsController(productsService) {
         var vm = this;
         vm.isLoading = false;
 
-        vm.print = print;
+        vm.upload = upload;
 
         function loadPage() {
             //employeesService.getEmployees().then(successGetEmployees, failGetEmployees);
@@ -15,8 +15,15 @@
         }
         loadPage();
 
-        function print(result) {
-            console.log(result);
+        function upload(result) {
+            productsService.uploadProducts(result).then(successUpload, failUpload);
+        }
+
+        function successUpload(data) {
+
+        }
+        function failUpload(data) {
+
         }
     }
 })();
