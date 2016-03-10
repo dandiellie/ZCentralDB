@@ -27,6 +27,7 @@ namespace ZCentralDB.Web
             bundles.Add(new ScriptBundle("~/bundles/angular").Include(
                         "~/Scripts/angular.js",
                         "~/Scripts/angular-ui-router.js",
+                        "~/Scripts/angular-csv-import.js",
                         "~/app/app.module.js",
                         "~/app/app.state.js",
                         "~/app/app.constant.js",

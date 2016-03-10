@@ -1,7 +1,7 @@
 ﻿(function () {
     //Dependencies here
     angular
-        .module('ZCentralDB', ['ui.router'])
+        .module('ZCentralDB', ['ui.router', 'ngCsvImport'])
         .directive('ngEnter', ngEnter);
 
     function ngEnter() {
